@@ -73,6 +73,16 @@
     .cta-section p { color: #6b7280; margin-bottom: 1.5rem; }
     footer { text-align: center; padding: 1.5rem; font-size: 13px; color: #9ca3af; border-top: 0.5px solid rgba(0,0,0,0.06); background: #ffffff; }
 
+    /* Bouton flottant profil */
+    #floating-avatar { display: none; position: fixed; bottom: 24px; left: 24px; z-index: 100; }
+    #floating-avatar img { width: 48px; height: 48px; border-radius: 50%; border: 3px solid #534AB7; cursor: pointer; box-shadow: 0 4px 16px rgba(83,74,183,0.3); transition: transform 0.2s; }
+    #floating-avatar img:hover { transform: scale(1.08); }
+    #avatar-menu { display: none; position: absolute; bottom: 60px; left: 0; background: #fff; border: 0.5px solid rgba(0,0,0,0.1); border-radius: 10px; padding: 8px; min-width: 180px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    #avatar-menu button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 12px; border: none; background: transparent; color: #1a1a2e; font-size: 13px; cursor: pointer; border-radius: 6px; }
+    #avatar-menu button:hover { background: #f8f9ff; color: #534AB7; }
+    #avatar-menu .logout-btn { color: #e53e3e; }
+    #avatar-menu .logout-btn:hover { background: #fff5f5; color: #e53e3e; }
+
     /* Dashboard */
     #dashboard { display: none; padding: 4rem 2rem; max-width: 900px; margin: 0 auto; }
     .user-banner { display: flex; align-items: center; gap: 14px; background: #ffffff; border: 0.5px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
@@ -95,6 +105,15 @@
   </style>
 </head>
 <body>
+
+<!-- BOUTON FLOTTANT PROFIL -->
+<div id="floating-avatar">
+  <div id="avatar-menu">
+    <button onclick="goToDashboard()"><i class="ti ti-layout-dashboard"></i> Mon tableau de bord</button>
+    <button class="logout-btn" onclick="logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
+  </div>
+  <img id="floating-avatar-img" src="" alt="Profil" onclick="toggleMenu()" title="Mon compte">
+</div>
 
 <nav>
   <div class="logo-wrap">
@@ -294,15 +313,16 @@
 
 </div>
 
-<!-- DASHBOARD (affiché après connexion) -->
+<!-- DASHBOARD -->
 <div id="dashboard">
   <div class="user-banner">
-   <img class="user-avatar" id="user-avatar" src="" alt="Avatar" onclick="goHome()" style="cursor:pointer;" title="Retour au site">
+    <img class="user-avatar" id="user-avatar" src="" alt="Avatar">
     <div class="user-info">
       <h4 id="user-name">Chargement...</h4>
       <p id="user-email"></p>
     </div>
-    <button class="btn-logout" onclick="logout()">Se déconnecter</button>
+    <button class="btn-logout" onclick="goHome()">← Retour au site</button>
+    <button class="btn-logout" onclick="logout()" style="margin-left:8px; color:#e53e3e; border-color:#e53e3e;">Se déconnecter</button>
   </div>
   <div class="section-label">Tableau de bord</div>
   <h2 style="margin-bottom:1.5rem">Vos automatisations</h2>
@@ -340,18 +360,36 @@
     window.location.href = url;
   }
 
-  function showDashboard(user) {
-    document.getElementById('main-site').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    document.getElementById('user-name').textContent = user.name;
-    document.getElementById('user-email').textContent = user.email;
-    document.getElementById('user-avatar').src = user.picture;
+  function showFloatingAvatar(picture) {
+    const el = document.getElementById('floating-avatar');
+    const img = document.getElementById('floating-avatar-img');
+    el.style.display = 'block';
+    img.src = picture;
   }
 
-  function logout() {
-    localStorage.removeItem('google_user');
-    document.getElementById('main-site').style.display = 'block';
-    document.getElementById('dashboard').style.display = 'none';
+  function toggleMenu() {
+    const menu = document.getElementById('avatar-menu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Fermer le menu si on clique ailleurs
+  document.addEventListener('click', function(e) {
+    const fa = document.getElementById('floating-avatar');
+    if (!fa.contains(e.target)) {
+      document.getElementById('avatar-menu').style.display = 'none';
+    }
+  });
+
+  function goToDashboard() {
+    document.getElementById('avatar-menu').style.display = 'none';
+    document.getElementById('main-site').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    const user = JSON.parse(localStorage.getItem('google_user'));
+    if (user) {
+      document.getElementById('user-name').textContent = user.name;
+      document.getElementById('user-email').textContent = user.email;
+      document.getElementById('user-avatar').src = user.picture;
+    }
   }
 
   function goHome() {
@@ -359,11 +397,22 @@
     document.getElementById('dashboard').style.display = 'none';
   }
 
-  const savedUser = localStorage.getItem('google_user');
-  if (savedUser) {
-    showDashboard(JSON.parse(savedUser));
+  function logout() {
+    localStorage.removeItem('google_user');
+    document.getElementById('floating-avatar').style.display = 'none';
+    document.getElementById('avatar-menu').style.display = 'none';
+    document.getElementById('main-site').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
   }
 
+  // Au chargement : si déjà connecté, montrer l'avatar flottant mais rester sur le site
+  const savedUser = localStorage.getItem('google_user');
+  if (savedUser) {
+    const user = JSON.parse(savedUser);
+    showFloatingAvatar(user.picture);
+  }
+
+  // Retour après connexion Google : rester sur le site, montrer l'avatar
   const hash = window.location.hash;
   if (hash.includes('access_token')) {
     const params = new URLSearchParams(hash.substring(1));
@@ -376,7 +425,8 @@
       const userData = { name: user.name, email: user.email, picture: user.picture };
       localStorage.setItem('google_user', JSON.stringify(userData));
       window.location.hash = '';
-      showDashboard(userData);
+      showFloatingAvatar(user.picture);
+      // Rester sur le site principal, ne pas aller au dashboard
     });
   }
 </script>
