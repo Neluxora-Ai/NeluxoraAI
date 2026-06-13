@@ -421,13 +421,11 @@
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(r => r.json())
-    .then(user => {
-      const userData = { name: user.name, email: user.email, picture: user.picture };
-      localStorage.setItem('google_user', JSON.stringify(userData));
-      window.location.hash = '';
-      showFloatingAvatar(user.picture);
-      // Rester sur le site principal, ne pas aller au dashboard
-    });
+   .then(user => {
+  const userData = { name: user.name, email: user.email, picture: user.picture };
+  localStorage.setItem('google_user', JSON.stringify(userData));
+  window.location.href = window.location.pathname;
+});
   }
 </script>
 
