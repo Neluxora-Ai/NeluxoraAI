@@ -398,12 +398,9 @@
   }
 
   function logout() {
-    localStorage.removeItem('google_user');
-    document.getElementById('floating-avatar').style.display = 'none';
-    document.getElementById('avatar-menu').style.display = 'none';
-    document.getElementById('main-site').style.display = 'block';
-    document.getElementById('dashboard').style.display = 'none';
-  }
+  localStorage.removeItem('google_user');
+  window.location.reload();
+}
 
   // Au chargement : si déjà connecté, montrer l'avatar flottant mais rester sur le site
   const savedUser = localStorage.getItem('google_user');
