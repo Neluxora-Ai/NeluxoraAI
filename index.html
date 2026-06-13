@@ -297,7 +297,7 @@
 <!-- DASHBOARD (affiché après connexion) -->
 <div id="dashboard">
   <div class="user-banner">
-    <img class="user-avatar" id="user-avatar" src="" alt="Avatar">
+   <img class="user-avatar" id="user-avatar" src="" alt="Avatar" onclick="goHome()" style="cursor:pointer;" title="Retour au site">
     <div class="user-info">
       <h4 id="user-name">Chargement...</h4>
       <p id="user-email"></p>
@@ -350,6 +350,11 @@
 
   function logout() {
     localStorage.removeItem('google_user');
+    document.getElementById('main-site').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+
+  function goHome() {
     document.getElementById('main-site').style.display = 'block';
     document.getElementById('dashboard').style.display = 'none';
   }
