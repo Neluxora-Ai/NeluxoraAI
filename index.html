@@ -360,13 +360,13 @@
     window.location.href = url;
   }
 
-  function showFloatingAvatar(picture) {
+ function showFloatingAvatar(picture) {
     const el = document.getElementById('floating-avatar');
     const img = document.getElementById('floating-avatar-img');
     el.style.display = 'block';
     img.src = picture;
+    document.getElementById('connexion').style.display = 'none';
   }
-
   function toggleMenu() {
     const menu = document.getElementById('avatar-menu');
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
