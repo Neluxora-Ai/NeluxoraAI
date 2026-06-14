@@ -69,6 +69,9 @@
     input[type="email"], input[type="password"] { width: 100%; margin-bottom: 10px; background: #f8f9ff; border: 0.5px solid rgba(0,0,0,0.15); color: #1a1a2e; padding: 10px 14px; border-radius: 8px; font-size: 14px; outline: none; }
     input[type="email"]:focus, input[type="password"]:focus { border-color: #534AB7; }
     input::placeholder { color: #9ca3af; }
+    .otp-inputs { display: flex; justify-content: center; gap: 10px; margin-bottom: 16px; }
+    .otp-inputs input { width: 48px; height: 56px; text-align: center; font-size: 24px; font-weight: 500; background: #f8f9ff; border: 0.5px solid rgba(0,0,0,0.15); color: #1a1a2e; border-radius: 8px; outline: none; padding: 0; }
+    .otp-inputs input:focus { border-color: #534AB7; box-shadow: 0 0 0 3px rgba(83,74,183,0.1); }
     .cta-section { background: #EEEDFE; border-top: 0.5px solid rgba(83,74,183,0.1); border-bottom: 0.5px solid rgba(83,74,183,0.1); padding: 3rem 2rem; text-align: center; }
     .cta-section h2 { font-size: 24px; margin-bottom: 0.75rem; color: #1a1a2e; }
     .cta-section p { color: #6b7280; margin-bottom: 1.5rem; }
@@ -306,7 +309,14 @@
       <!-- Étape 2 : saisie du code -->
       <div id="otp-step-code" style="display:none;">
         <p style="text-align:center; font-size:13px; color:#6b7280; margin-bottom:10px;">Entrez le code reçu par email</p>
-        <input type="text" id="otp-code" placeholder="Code à 6 chiffres" maxlength="6" inputmode="numeric">
+        <div class="otp-inputs">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+        </div>
         <button class="btn-primary" style="width:100%; margin-bottom:12px;" onclick="verifyOtpCode()">Valider</button>
         <p id="otp-code-message" style="text-align:center; font-size:13px; color:#9ca3af;"></p>
         <p style="text-align:center; font-size:13px; color:#9ca3af;"><span style="color:#534AB7; cursor:pointer;" onclick="resetOtpForm()">← Changer d'email</span></p>
@@ -400,16 +410,44 @@
       document.getElementById('otp-step-code').style.display = 'block';
       document.getElementById('otp-code-message').textContent = "Code envoyé à " + email;
       document.getElementById('otp-code-message').style.color = '#9ca3af';
+      const firstDigit = document.querySelector('.otp-digit');
+      if (firstDigit) firstDigit.focus();
+    });
+  }
+
+  function setupOtpDigitInputs() {
+    const digits = document.querySelectorAll('.otp-digit');
+    digits.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        input.value = input.value.replace(/[^0-9]/g, '');
+        if (input.value && index < digits.length - 1) {
+          digits[index + 1].focus();
+        }
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          digits[index - 1].focus();
+        }
+      });
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+        pasted.split('').forEach((char, i) => {
+          if (digits[i]) digits[i].value = char;
+        });
+        const next = digits[Math.min(pasted.length, digits.length - 1)];
+        if (next) next.focus();
+      });
     });
   }
 
   function verifyOtpCode() {
-    const codeInput = document.getElementById('otp-code');
+    const digits = document.querySelectorAll('.otp-digit');
+    const code = Array.from(digits).map(d => d.value).join('');
     const msg = document.getElementById('otp-code-message');
-    const code = codeInput.value.trim();
 
-    if (!code) {
-      msg.textContent = "Veuillez entrer le code reçu par email.";
+    if (code.length !== 6) {
+      msg.textContent = "Veuillez entrer les 6 chiffres du code.";
       msg.style.color = '#e53e3e';
       return;
     }
@@ -438,7 +476,7 @@
     document.getElementById('otp-step-code').style.display = 'none';
     document.getElementById('otp-step-email').style.display = 'block';
     document.getElementById('otp-email-message').textContent = '';
-    document.getElementById('otp-code').value = '';
+    document.querySelectorAll('.otp-digit').forEach(d => d.value = '');
     otpEmail = '';
   }
   // --- Fin Supabase ---
@@ -491,6 +529,9 @@
       window.location.reload();
     });
   }
+
+  // Initialiser les champs de code OTP
+  setupOtpDigitInputs();
 
   // Au chargement : si déjà connecté, montrer l'avatar flottant mais rester sur le site
   const savedUser = localStorage.getItem('google_user');
