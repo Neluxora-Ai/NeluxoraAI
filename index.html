@@ -89,7 +89,7 @@
     #avatar-menu .logout-btn:hover { background: #fff5f5; color: #e53e3e; }
 
     /* Dashboard */
-    #dashboard { display: none; padding: 4rem 2rem; max-width: 900px; margin: 0 auto; }
+    #dashboard { display: none; padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
     .user-banner { display: flex; align-items: center; gap: 14px; background: #ffffff; border: 0.5px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
     .user-avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #534AB7; }
     .user-info h4 { font-size: 15px; font-weight: 500; color: #1a1a2e; }
@@ -101,12 +101,42 @@
     .dash-card .label { font-size: 12px; color: #9ca3af; margin-bottom: 6px; }
     .dash-card .value { font-size: 28px; font-weight: 500; color: #534AB7; }
     .dash-card .sub { font-size: 12px; color: #9ca3af; margin-top: 4px; }
-    .automations-table { width: 100%; border-collapse: collapse; background: #ffffff; border: 0.5px solid rgba(0,0,0,0.08); border-radius: 12px; overflow: hidden; font-size: 13px; }
-    .automations-table th { background: #f8f9ff; color: #534AB7; text-align: left; padding: 10px 12px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 0.5px solid rgba(0,0,0,0.08); }
-    .automations-table td { padding: 12px; border-bottom: 0.5px solid rgba(0,0,0,0.06); vertical-align: top; color: #1a1a2e; }
-    .automations-table tr:last-child td { border-bottom: none; }
-    .automations-table .col-date { white-space: nowrap; color: #9ca3af; font-size: 12px; }
-    .automations-table .col-sender { color: #6b7280; font-size: 12px; }
+
+    /* Mail app dashboard */
+    .mail-app { display: flex; background: #ffffff; border: 0.5px solid rgba(0,0,0,0.08); border-radius: 12px; overflow: hidden; min-height: 520px; }
+    .mail-sidebar { width: 360px; min-width: 280px; border-right: 0.5px solid rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+    .mail-search-wrap { padding: 12px; border-bottom: 0.5px solid rgba(0,0,0,0.08); position: relative; }
+    .mail-search-wrap i { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 15px; pointer-events: none; }
+    #mail-search { width: 100%; padding: 9px 12px 9px 34px; background: #f8f9ff; border: 0.5px solid rgba(0,0,0,0.1); border-radius: 8px; font-size: 13px; outline: none; }
+    #mail-search:focus { border-color: #534AB7; }
+    .mail-count { font-size: 11px; color: #9ca3af; padding: 8px 16px 4px; }
+    .mail-list { overflow-y: auto; flex: 1; max-height: 460px; }
+    .mail-list-item { padding: 12px 16px; border-bottom: 0.5px solid rgba(0,0,0,0.06); cursor: pointer; transition: background 0.15s; }
+    .mail-list-item:hover { background: #f8f9ff; }
+    .mail-list-item.active { background: #EEEDFE; border-left: 3px solid #534AB7; padding-left: 13px; }
+    .mail-list-item .mli-top { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 3px; }
+    .mail-list-item .mli-sender { font-size: 12px; color: #6b7280; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+    .mail-list-item .mli-date { font-size: 11px; color: #9ca3af; white-space: nowrap; }
+    .mail-list-item .mli-subject { font-size: 13px; color: #1a1a2e; font-weight: 500; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mail-list-item .mli-snippet { font-size: 12px; color: #9ca3af; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mail-empty { padding: 2rem 1rem; text-align: center; color: #9ca3af; font-size: 13px; }
+    .mail-detail { flex: 1; padding: 1.75rem 2rem; overflow-y: auto; max-height: 520px; }
+    .mail-detail-empty { display: flex; align-items: center; justify-content: center; height: 100%; color: #9ca3af; font-size: 13px; text-align: center; padding: 2rem; }
+    .mail-detail-subject { font-size: 19px; font-weight: 500; color: #1a1a2e; margin-bottom: 6px; }
+    .mail-detail-meta { font-size: 12px; color: #9ca3af; margin-bottom: 1.5rem; display: flex; gap: 10px; flex-wrap: wrap; }
+    .mail-detail-meta strong { color: #6b7280; font-weight: 500; }
+    .mail-block { margin-bottom: 1.5rem; }
+    .mail-block-label { font-size: 11px; color: #534AB7; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    .mail-block-content { font-size: 14px; color: #1a1a2e; line-height: 1.7; white-space: pre-wrap; background: #f8f9ff; border-radius: 8px; padding: 14px 16px; border: 0.5px solid rgba(0,0,0,0.06); }
+    .copy-btn { background: transparent; border: 0.5px solid rgba(83,74,183,0.3); color: #534AB7; font-size: 11px; padding: 3px 10px; border-radius: 6px; cursor: pointer; font-weight: 500; text-transform: none; letter-spacing: normal; }
+    .copy-btn:hover { background: #EEEDFE; }
+
+    @media (max-width: 760px) {
+      .mail-app { flex-direction: column; }
+      .mail-sidebar { width: 100%; border-right: none; border-bottom: 0.5px solid rgba(0,0,0,0.08); }
+      .mail-list { max-height: 260px; }
+      .mail-detail { max-height: none; }
+    }
 
     @media (max-width: 600px) {
       nav { padding: 1rem; }
@@ -388,8 +418,21 @@
 
   <div class="section-label" style="margin-top:2rem">Activité récente</div>
   <h2 style="margin-bottom:1rem">Vos automatisations</h2>
-  <div id="automations-list">
-    <p style="color:#9ca3af; font-size:14px;">Chargement...</p>
+
+  <div class="mail-app">
+    <div class="mail-sidebar">
+      <div class="mail-search-wrap">
+        <i class="ti ti-search"></i>
+        <input type="text" id="mail-search" placeholder="Rechercher un email, un expéditeur..." oninput="filterAutomations()">
+      </div>
+      <div class="mail-count" id="mail-count"></div>
+      <div class="mail-list" id="mail-list">
+        <div class="mail-empty">Chargement...</div>
+      </div>
+    </div>
+    <div class="mail-detail" id="mail-detail">
+      <div class="mail-detail-empty">Sélectionnez un email dans la liste pour voir le résumé et la réponse suggérée.</div>
+    </div>
   </div>
 
 </div>
@@ -404,6 +447,8 @@
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let otpEmail = '';
+  let allAutomations = [];
+  let selectedAutomationIndex = null;
 
   function sendOtpCode() {
     const emailInput = document.getElementById('otp-email');
@@ -619,6 +664,7 @@
         });
     });
   }
+
   function escapeHtml(str) {
     const div = document.createElement('div');
     div.textContent = str || '';
@@ -640,11 +686,10 @@
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .then(({ data: rows, error }) => {
-          const listEl = document.getElementById('automations-list');
           const values = document.querySelectorAll('.dash-card .value');
 
           if (error || !rows) {
-            listEl.innerHTML = '<p style="color:#9ca3af; font-size:14px;">Erreur de chargement.</p>';
+            document.getElementById('mail-list').innerHTML = '<div class="mail-empty">Erreur de chargement.</div>';
             return;
           }
 
@@ -653,41 +698,97 @@
           if (values[2]) values[2].textContent = rows.filter(r => r.suggested_reply).length;
           if (values[3]) values[3].textContent = Math.round(rows.length * 3 / 60 * 10) / 10 + 'h';
 
-          if (rows.length === 0) {
-            listEl.innerHTML = '<p style="color:#9ca3af; font-size:14px;">Aucun email traité pour le moment.</p>';
-            return;
-          }
-
-          const rowsHtml = rows.map(r => `
-            <tr>
-              <td class="col-date">${new Date(r.created_at).toLocaleString('fr-FR')}</td>
-              <td><strong>${escapeHtml(r.subject) || '(sans sujet)'}</strong></td>
-              <td class="col-sender">${escapeHtml(r.sender)}</td>
-              <td>${escapeHtml(truncate(r.summary, 150))}</td>
-              <td>${escapeHtml(truncate(r.suggested_reply, 150))}</td>
-            </tr>
-          `).join('');
-
-          listEl.innerHTML = `
-            <div style="overflow-x:auto;">
-              <table class="automations-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Sujet</th>
-                    <th>Expéditeur</th>
-                    <th>Résumé</th>
-                    <th>Réponse suggérée</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${rowsHtml}
-                </tbody>
-              </table>
-            </div>
-          `;
+          allAutomations = rows;
+          selectedAutomationIndex = null;
+          renderMailList(allAutomations);
+          renderMailDetail(null);
         });
     });
+  }
+
+  function renderMailList(rows) {
+    const listEl = document.getElementById('mail-list');
+    const countEl = document.getElementById('mail-count');
+    countEl.textContent = rows.length + ' email' + (rows.length > 1 ? 's' : '');
+
+    if (rows.length === 0) {
+      listEl.innerHTML = '<div class="mail-empty">Aucun email ne correspond.</div>';
+      return;
+    }
+
+    listEl.innerHTML = rows.map((r, i) => `
+      <div class="mail-list-item${selectedAutomationIndex === i ? ' active' : ''}" onclick="selectAutomation(${i})">
+        <div class="mli-top">
+          <span class="mli-sender">${escapeHtml(r.sender)}</span>
+          <span class="mli-date">${new Date(r.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}</span>
+        </div>
+        <div class="mli-subject">${escapeHtml(r.subject) || '(sans sujet)'}</div>
+        <div class="mli-snippet">${escapeHtml(truncate(r.summary, 70))}</div>
+      </div>
+    `).join('');
+  }
+
+  function selectAutomation(index) {
+    selectedAutomationIndex = index;
+    const currentRows = getFilteredAutomations();
+    renderMailList(currentRows);
+    renderMailDetail(currentRows[index]);
+  }
+
+  function renderMailDetail(row) {
+    const detailEl = document.getElementById('mail-detail');
+    if (!row) {
+      detailEl.innerHTML = '<div class="mail-detail-empty">Sélectionnez un email dans la liste pour voir le résumé et la réponse suggérée.</div>';
+      return;
+    }
+
+    detailEl.innerHTML = `
+      <div class="mail-detail-subject">${escapeHtml(row.subject) || '(sans sujet)'}</div>
+      <div class="mail-detail-meta">
+        <span><strong>De :</strong> ${escapeHtml(row.sender)}</span>
+        <span><strong>Reçu le :</strong> ${new Date(row.created_at).toLocaleString('fr-FR')}</span>
+      </div>
+      <div class="mail-block">
+        <div class="mail-block-label">
+          Résumé
+          <button class="copy-btn" onclick="copyToClipboard(this, ${JSON.stringify(row.summary || '')})">Copier</button>
+        </div>
+        <div class="mail-block-content">${escapeHtml(row.summary) || 'Aucun résumé disponible.'}</div>
+      </div>
+      <div class="mail-block">
+        <div class="mail-block-label">
+          Réponse suggérée
+          <button class="copy-btn" onclick="copyToClipboard(this, ${JSON.stringify(row.suggested_reply || '')})">Copier</button>
+        </div>
+        <div class="mail-block-content">${escapeHtml(row.suggested_reply) || 'Aucune réponse suggérée.'}</div>
+      </div>
+    `;
+  }
+
+  function copyToClipboard(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const original = btn.textContent;
+      btn.textContent = 'Copié ✓';
+      setTimeout(() => { btn.textContent = original; }, 1500);
+    });
+  }
+
+  function getFilteredAutomations() {
+    const query = (document.getElementById('mail-search').value || '').trim().toLowerCase();
+    if (!query) return allAutomations;
+    return allAutomations.filter(r =>
+      (r.subject || '').toLowerCase().includes(query) ||
+      (r.sender || '').toLowerCase().includes(query) ||
+      (r.summary || '').toLowerCase().includes(query) ||
+      (r.suggested_reply || '').toLowerCase().includes(query)
+    );
+  }
+
+  function filterAutomations() {
+    selectedAutomationIndex = null;
+    const filtered = getFilteredAutomations();
+    renderMailList(filtered);
+    renderMailDetail(null);
   }
 
   function goHome() {
