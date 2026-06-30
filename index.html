@@ -575,6 +575,20 @@
     </div>
   </div>
 
+  <div id="confirm-disconnect-overlay" class="account-modal-overlay" style="display:none;" onclick="if(event.target===this) closeConfirmDisconnect()">
+    <div class="account-modal" style="max-width:380px; text-align:center;">
+      <div style="width:52px; height:52px; background:#fff5f5; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; font-size:22px; color:#e53e3e;">
+        <i class="ti ti-mail-off"></i>
+      </div>
+      <h3 style="margin-bottom:0.5rem; font-size:17px;">Déconnecter Gmail ?</h3>
+      <p style="font-size:13px; color:#6b7280; line-height:1.6; margin-bottom:1.5rem;">Les automatisations s'arrêteront immédiatement. Votre historique de résumés sera conservé, et vous pourrez reconnecter votre boîte à tout moment.</p>
+      <div style="display:flex; gap:10px;">
+        <button class="btn-outline" style="flex:1;" onclick="closeConfirmDisconnect()">Annuler</button>
+        <button class="btn-primary" style="flex:1; background:#e53e3e;" onclick="confirmDisconnectGmail()">Déconnecter</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 <script>
   const CLIENT_ID = '204789491425-n0gho0te1j0bvkh6nqj8gajkgikv7589.apps.googleusercontent.com';
@@ -769,8 +783,18 @@
   }
 
   function disconnectGmail() {
-    if (!confirm("Voulez-vous vraiment déconnecter votre boîte Gmail ? Les automatisations s'arrêteront immédiatement.")) return;
+    document.getElementById('confirm-disconnect-overlay').style.display = 'flex';
+    if (document.getElementById('dash-nav-more')) {
+      document.getElementById('dash-nav-more').style.display = 'none';
+    }
+  }
 
+  function closeConfirmDisconnect() {
+    document.getElementById('confirm-disconnect-overlay').style.display = 'none';
+  }
+
+  function confirmDisconnectGmail() {
+    closeConfirmDisconnect();
     supabaseClient.auth.getUser().then(({ data }) => {
       const user = data?.user;
       if (!user) return;
