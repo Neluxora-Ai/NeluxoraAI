@@ -151,6 +151,7 @@
 <!-- BOUTON FLOTTANT PROFIL -->
 <div id="floating-avatar">
   <div id="avatar-menu">
+    <button onclick="goHome()"><i class="ti ti-home"></i> Site principal</button>
     <button onclick="goToDashboard()"><i class="ti ti-layout-dashboard"></i> Mon tableau de bord</button>
     <button class="logout-btn" onclick="logout()"><i class="ti ti-logout"></i> Se déconnecter</button>
   </div>
@@ -167,8 +168,10 @@
     <a href="#tarifs">Tarifs</a>
     <a href="#connexion">Connexion</a>
   </div>
-  <button class="btn-primary" onclick="document.getElementById('connexion').scrollIntoView({behavior:'smooth'})">Commencer</button>
+  <button class="btn-primary" id="nav-dashboard-btn" style="display:none;" onclick="goToDashboard()">Mon tableau de bord</button>
+  <button class="btn-primary" id="nav-start-btn" onclick="document.getElementById('connexion').scrollIntoView({behavior:'smooth'})">Commencer</button>
 </nav>
+
 
 <!-- SITE PRINCIPAL -->
 <div id="main-site">
@@ -563,6 +566,10 @@
     el.style.display = 'block';
     img.src = picture;
     document.getElementById('connexion').style.display = 'none';
+    const navDashboardBtn = document.getElementById('nav-dashboard-btn');
+    const navStartBtn = document.getElementById('nav-start-btn');
+    if (navDashboardBtn) navDashboardBtn.style.display = 'inline-block';
+    if (navStartBtn) navStartBtn.style.display = 'none';
   }
   function toggleMenu() {
     const menu = document.getElementById('avatar-menu');
